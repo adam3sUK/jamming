@@ -10,21 +10,24 @@ class App extends React.Component {
     super(props);
     this.state = {
       searchResults: [
-        {name: 'name1', artist: 'artist1', album: 'album1', id: 1},
-        {name: 'name2', artist: 'artist2', album: 'album2', id: 2},
-        {name: 'name3', artist: 'artist3', album: 'album3', id: 3},
-        {name: 'name4', artist: 'artist4', album: 'album4', id: 4}
+        {name: 'Beyond', artist: 'Leon Bridges', album: 'Good Thing', id: 1},
+        {name: 'Beyond the Sea', artist: 'Bobby Darin', album: 'Thats All', id: 2},
+        {name: 'Beyond Barricades', artist: 'Claes Nilsson', album: 'The Sleeper', id: 3},
+        {name: 'Beyond', artist: 'Daft Punk', album: 'Random Access Memory', id: 4}
       ],
       playlistName: 'BasicPlaylist',
       playlistTracks: [
-        {name: 'name5', artist: 'artist5', album: 'album5', id: 5},
-        {name: 'name6', artist: 'artist6', album: 'album6', id: 6},
-        {name: 'name7', artist: 'artist7', album: 'album7', id: 7},
-        {name: 'name8', artist: 'artist8', album: 'album8', id: 8}
+        {name: 'Straight Outta Compton', artist: 'NWA', album: 'Straight Outta Compton', id: 5},
+        {name: 'Baby', artist: 'Eminem', album: 'MM2', id: 6},
+        {name: 'Vertigo', artist: 'The Libertines', album: 'Up the bracket', id: 7},
+        {name: 'We Will Rock You', artist: 'Queen', album: 'Greatest Hits', id: 8}
       ]
     };
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
+    this.updatePlaylistName = this.updatePlaylistName.bind(this);
+    this.savePlaylist = this.savePlaylist.bind(this);
+    this.search = this.search.bind(this);
   }
   addTrack(track) {
     let tracks = this.state.playlistTracks;
@@ -38,20 +41,31 @@ class App extends React.Component {
   }
   removeTrack(track) {
     let tracks = this.state.playlistTracks;
-    tracks = tracks.fill(currentTrack => currentTrack.id !== track.id);
+    tracks = tracks.filter(currentTrack => currentTrack.id !== track.id);
      this.setState(
       { playlistTracks: tracks }
      )
+  }
+  updatePlaylistName(name) {
+    this.setState(
+      { playlistName : name }
+    )
+  }
+  savePlaylist() {
+    const trackURIs = this.state.playlistTracks.map(track => track.uri);
+  }
+  search(searchTerm) {
+    console.log(searchTerm);
   }
   render() {
     return (
       <div>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
         <div className="App">
-          <SearchBar />
+          <SearchBar onSerach={this.search} />
           <div className="App-playlist">
             <SearchResults searchResults={this.state.searchResults} onAdd={this.addTrack}/>
-            <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack}/>
+            <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist} />
           </div>
         </div>
       </div>
